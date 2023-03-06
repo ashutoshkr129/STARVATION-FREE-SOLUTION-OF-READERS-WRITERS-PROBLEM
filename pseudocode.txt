@@ -1,0 +1,47 @@
+// Semaphores Initialization:
+	queue_in = 1; mutex = 1; w_mutex = 1;
+
+// Implementation for Reader
+
+do{
+    // Entry Section
+    wait(queue_in);
+    wait(mutex);
+    counter++;
+    if(counter == 1) wait(w_mutex); 
+    signal(mutex);
+    signal(queue_in);
+
+    /*
+       Critical Section 
+    */
+
+   // Exit Section
+    wait(mutex);
+        counter--;
+    if(counter == 0) wait(w_mutex); 
+    signal(mutex);
+
+   // Remainder Section
+}while(true);
+
+
+// Implementation for Writer
+
+do{
+
+    // Entry Section
+    wait(queue_in);
+    wait(w_mutex);
+
+    /*      
+      Critical Section  
+    */
+
+    // Exit Section
+    signal(w_mutex);
+    signal(queue_in);
+
+    // Remainder Section
+
+}while(true);
